@@ -8,6 +8,7 @@ using Stashbox.Configuration.Attributes;
 using Stashbox.Entity;
 using Stashbox.Infrastructure;
 using Stashbox.Infrastructure.ContainerExtension;
+using Stashbox.Infrastructure.Registration;
 using SettingAttribute = Stashbox.Configuration.Attributes.SettingAttribute;
 
 namespace Stashbox.Configuration
@@ -29,39 +30,31 @@ namespace Stashbox.Configuration
             this.propertySetters = new ConcurrentDictionary<Type, ConcurrentDictionary<string, PropertySetterInfo>>();
         }
 
-        public void Initialize(IContainerContext containerContext)
-        { }
-
-        public void CleanUp()
-        { }
-
         public IContainerExtension CreateCopy() =>
             new AutoConfigurationExtension(this.settingReader, this.connectionStringReader, this.separator);
 
-        public void OnRegistration(IContainerContext containerContext, Type typeTo, Type typeFrom,
-            InjectionParameter[] injectionParameters = null)
+        public void OnRegistration(IContainerContext containerContext, IServiceRegistration registration)
         {
-            typeTo.GetCustomSettingAttributes<SettingPrefixAttribute>()
-                .ForEach(attribute => this.prefixes.AddOrUpdate(typeTo, attribute.Prefix, (key, old) => attribute.Prefix));
+            registration.ImplementationType.GetCustomSettingAttributes<SettingPrefixAttribute>()
+                .ForEach(attribute => this.prefixes.AddOrUpdate(registration.ImplementationType, attribute.Prefix, (key, old) => attribute.Prefix));
 
-            typeTo.GetProperties().ForEach(property =>
+            registration.ImplementationType.GetProperties().ForEach(property =>
             {
                 property.GetCustomSettingAttributes<SettingAttribute>()
-                    .ForEach(attribute => this.AddAttributeData(attribute, typeTo, property, ConfigurationType.AppSetting));
+                    .ForEach(attribute => this.AddAttributeData(attribute, registration.ImplementationType, property, ConfigurationType.AppSetting));
 
                 property.GetCustomSettingAttributes<ConnectionStringAttribute>()
-                    .ForEach(attribute => this.AddAttributeData(attribute, typeTo, property, ConfigurationType.ConnectionString));
+                    .ForEach(attribute => this.AddAttributeData(attribute, registration.ImplementationType, property, ConfigurationType.ConnectionString));
             });
         }
 
-        public object PostBuild(object instance, IContainerContext containerContext, ResolutionInfo resolutionInfo, Type resolveType,
-            InjectionParameter[] injectionParameters = null)
+        public object PostBuild(object instance, IContainerContext containerContext, ResolutionInfo resolutionInfo, IServiceRegistration serviceRegistration, Type requestedType)
         {
             string prefix;
             ConcurrentDictionary<string, PropertySetterInfo> setters;
 
-            this.prefixes.TryGetValue(resolveType, out prefix);
-            this.propertySetters.TryGetValue(resolveType, out setters);
+            this.prefixes.TryGetValue(serviceRegistration.ImplementationType, out prefix);
+            this.propertySetters.TryGetValue(serviceRegistration.ImplementationType, out setters);
 
             if (prefix == null && setters == null)
                 return instance;
@@ -89,6 +82,12 @@ namespace Stashbox.Configuration
 
             return instance;
         }
+
+        public void Initialize(IContainerContext containerContext)
+        { }
+
+        public void CleanUp()
+        { }
 
         private void AddAttributeData(SettingAttribute attribute, Type typeTo, PropertyInfo property, ConfigurationType configurationType)
         {

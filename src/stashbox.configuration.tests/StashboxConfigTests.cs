@@ -5,7 +5,6 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Stashbox;
 using Stashbox.Configuration;
 using Stashbox.Configuration.Tests;
-using Stashbox.Exceptions;
 using Stashbox.Infrastructure;
 
 namespace stashbox.configuration.tests
