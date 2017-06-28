@@ -44,10 +44,11 @@
     <Reference Include="Microsoft.VisualStudio.TestPlatform.TestFramework.Extensions, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\MSTest.TestFramework.1.1.11\lib\net45\Microsoft.VisualStudio.TestPlatform.TestFramework.Extensions.dll</HintPath>
     </Reference>
-    <Reference Include="Stashbox, Version=2.5.2.0, Culture=neutral, PublicKeyToken=9778e33426732b68, processorArchitecture=MSIL">
-      <HintPath>..\packages\Stashbox.2.5.2\lib\net45\Stashbox.dll</HintPath>
+    <Reference Include="Stashbox">
+      <HintPath>..\packages\Stashbox.2.5.3\lib\net45\Stashbox.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Stashbox;
@@ -23,7 +24,7 @@ namespace stashbox.configuration.tests
         [TestMethod]
         public void WireUpConfigurationUnityExtensionTests_WithRegisteredSettingsManager()
         {
-            this.stashboxContainer.RegisterExtension(new AutoConfigurationExtension());
+            this.stashboxContainer.RegisterExtension(new AutoConfigurationExtension(settingReader: key => ConfigurationManager.AppSettings[key]));
             this.stashboxContainer.RegisterType<FakeClass1>();
 
             var fake = this.stashboxContainer.Resolve<FakeClass1>();
