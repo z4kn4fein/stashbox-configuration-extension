@@ -1,18 +1,21 @@
-﻿using System;
+﻿using Stashbox.Configuration.Attributes;
+using Stashbox.Infrastructure;
+using Stashbox.Infrastructure.ContainerExtension;
+using Stashbox.Infrastructure.Registration;
+using Stashbox.Resolution;
+using System;
 using System.Collections.Concurrent;
 using System.ComponentModel;
 using System.Configuration;
 using System.Linq;
 using System.Reflection;
-using Stashbox.Configuration.Attributes;
-using Stashbox.Entity;
-using Stashbox.Infrastructure;
-using Stashbox.Infrastructure.ContainerExtension;
-using Stashbox.Infrastructure.Registration;
 using SettingAttribute = Stashbox.Configuration.Attributes.SettingAttribute;
 
 namespace Stashbox.Configuration
 {
+    /// <summary>
+    /// Represents the auto configuration extension.
+    /// </summary>
     public class AutoConfigurationExtension : IRegistrationExtension, IPostBuildExtension
     {
         private readonly Func<string, string> settingReader;
@@ -21,6 +24,12 @@ namespace Stashbox.Configuration
         private readonly ConcurrentDictionary<Type, ConcurrentDictionary<string, PropertySetterInfo>> propertySetters;
         private readonly ConcurrentDictionary<Type, string> prefixes;
 
+        /// <summary>
+        /// Constructs an <see cref="AutoConfigurationExtension"/>.
+        /// </summary>
+        /// <param name="settingReader">The setting reader delegate.</param>
+        /// <param name="connectionStringReader">The connection string reader delegate.</param>
+        /// <param name="separator">The separator character</param>
         public AutoConfigurationExtension(Func<string, string> settingReader = null, Func<string, string> connectionStringReader = null, string separator = ":")
         {
             this.settingReader = settingReader ?? (key => ConfigurationManager.AppSettings.Get(key));
@@ -30,9 +39,11 @@ namespace Stashbox.Configuration
             this.propertySetters = new ConcurrentDictionary<Type, ConcurrentDictionary<string, PropertySetterInfo>>();
         }
 
+        /// <inheritdoc />
         public IContainerExtension CreateCopy() =>
             new AutoConfigurationExtension(this.settingReader, this.connectionStringReader, this.separator);
 
+        /// <inheritdoc />
         public void OnRegistration(IContainerContext containerContext, IServiceRegistration registration)
         {
             registration.ImplementationType.GetCustomSettingAttributes<SettingPrefixAttribute>()
@@ -48,7 +59,8 @@ namespace Stashbox.Configuration
             });
         }
 
-        public object PostBuild(object instance, IContainerContext containerContext, ResolutionInfo resolutionInfo, IServiceRegistration serviceRegistration, Type requestedType)
+        /// <inheritdoc />
+        public object PostBuild(object instance, IContainerContext containerContext, ResolutionContext resolutionInfo, IServiceRegistration serviceRegistration, Type requestedType)
         {
             string prefix;
             ConcurrentDictionary<string, PropertySetterInfo> setters;
@@ -83,9 +95,11 @@ namespace Stashbox.Configuration
             return instance;
         }
 
+        /// <inheritdoc />
         public void Initialize(IContainerContext containerContext)
         { }
 
+        /// <inheritdoc />
         public void CleanUp()
         { }
 
