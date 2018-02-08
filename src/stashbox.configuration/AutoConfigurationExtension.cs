@@ -1,7 +1,6 @@
 ﻿using Stashbox.Configuration.Attributes;
-using Stashbox.Infrastructure;
-using Stashbox.Infrastructure.ContainerExtension;
-using Stashbox.Infrastructure.Registration;
+using Stashbox.ContainerExtension;
+using Stashbox.Registration;
 using Stashbox.Resolution;
 using System;
 using System.Collections.Concurrent;

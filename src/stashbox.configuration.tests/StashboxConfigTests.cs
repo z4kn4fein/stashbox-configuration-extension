@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Stashbox;
 using Stashbox.Configuration;
 using Stashbox.Configuration.Tests;
-using Stashbox.Infrastructure;
+using System;
+using System.Collections.Generic;
+using System.Configuration;
+using System.Linq;
 
 namespace stashbox.configuration.tests
 {
