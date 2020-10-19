@@ -1,8 +1,10 @@
-# stashbox-configuration-extension [![Build status](https://ci.appveyor.com/api/projects/status/4uopj58p4dw4wh4p/branch/master?svg=true)](https://ci.appveyor.com/project/pcsajtai/stashbox-configuration-extension/branch/master) [![NuGet Version](https://buildstats.info/nuget/Stashbox.Configuration)](https://www.nuget.org/packages/Stashbox.Configuration/)
+# stashbox-configuration-extension [archived]
 
 **This repository has been archived**. The project is not maintained anymore due to the changes introduced in the [core project](https://github.com/z4kn4fein/stashbox), the concept of these kind of extensions has become obsolate.
 
 ---
+
+[![Build status](https://ci.appveyor.com/api/projects/status/4uopj58p4dw4wh4p/branch/master?svg=true)](https://ci.appveyor.com/project/pcsajtai/stashbox-configuration-extension/branch/master) [![NuGet Version](https://buildstats.info/nuget/Stashbox.Configuration)](https://www.nuget.org/packages/Stashbox.Configuration/)
 
 Auto application configuration parser extension for [Stashbox](https://github.com/z4kn4fein/stashbox)
 
